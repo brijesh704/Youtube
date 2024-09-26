@@ -8,6 +8,8 @@ import MainContainer from "./views/mainContainer/MainContainer";
 import WatchPage from "./views/WatchPage/WatchPage";
 
 function App() {
+  // console.log("ninja console");
+
   const appRouter = createBrowserRouter([
     {
       path: "/",
