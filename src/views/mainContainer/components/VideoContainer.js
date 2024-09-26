@@ -13,15 +13,31 @@ const VideoContainer = () => {
     getVideos();
   }, []);
 
-  const getVideos = async () => {
-    const data = await fetch(YOUTUBE_VIDEOS_API);
-    const json = await data.json();
-    // console.log(json.items);
+  // const getVideos = async () => {
+  //   const data = await fetch("http://localhost:5000/api/videos");
+  //   console.log(data);
 
-    setVideos(json?.items);
-  };
+  //   console.log(json.items);
+
+  //   setVideos(json?.items);
+  // };
 
   // console.log(videos[0]?.statistics);
+
+  const getVideos = async () => {
+    try {
+      const response = await fetch(YOUTUBE_VIDEOS_API);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const json = await response.json();
+      // console.log(json);
+      setVideos(json.items);
+    } catch (error) {
+      console.error("Error fetching videos:", error); // Handle error
+    }
+  };
   return (
     <div
       className={`grid gap-2 p-4 ${
