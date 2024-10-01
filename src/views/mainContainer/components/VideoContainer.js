@@ -59,7 +59,7 @@ const VideoContainer = () => {
         // console.log(video.id.videoId);
         const videoId = video.id.videoId || video.id;
         return (
-          <Link key={videoId} to={"/watch?v=" + video.id}>
+          <Link key={videoId} to={"/watch?v=" + videoId}>
             <VideoCard info={video} />
           </Link>
         );
