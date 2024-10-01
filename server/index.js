@@ -62,11 +62,37 @@ app.get("/api/videos", async (req, res) => {
         },
       }
     );
-    // console.log(response.data, "response");
+
+    // console.log(response, "response");
 
     res.json(response.data);
   } catch (error) {
     console.error("Error fetching videos:", error.message);
+    res.status(500).send("Error fetching data from YouTube API");
+  }
+});
+
+app.get("/api/search/video", async (req, res) => {
+  const query = req.query.q || "";
+  console.log("query reach to server", query);
+
+  try {
+    const response = await axios.get(
+      "https://youtube.googleapis.com/youtube/v3/search",
+      {
+        params: {
+          part: "snippet",
+          q: query,
+          type: "video",
+          maxResults: 10,
+          key: API_KEY,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching video search results:", error.message);
     res.status(500).send("Error fetching data from YouTube API");
   }
 });

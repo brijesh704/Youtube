@@ -10,3 +10,4 @@
 
 export const YOUTUBE_VIDEOS_API = "http://localhost:3001/api/videos";
 export const YOUTUBE_SEARCH_API = "http://localhost:3001/api/search?q=";
+export const YOUTUBE_SEARCH_VIDEO = "http://localhost:3001/api/search/video?q=";

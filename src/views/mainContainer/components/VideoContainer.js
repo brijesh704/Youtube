@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { YOUTUBE_VIDEOS_API } from "../../../utils/contants";
+import {
+  YOUTUBE_VIDEOS_API,
+  YOUTUBE_SEARCH_VIDEO,
+} from "../../../utils/contants";
 import VideoCard from "./VideoCard";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,36 +11,37 @@ const VideoContainer = () => {
   const [videos, setVideos] = useState([]);
 
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
+  const currentquery = useSelector((store) => store.search.currentQuery);
+  // console.log("query in video container ", currentquery);
 
   useEffect(() => {
     getVideos();
-  }, []);
-
-  // const getVideos = async () => {
-  //   const data = await fetch("http://localhost:5000/api/videos");
-  //   console.log(data);
-
-  //   console.log(json.items);
-
-  //   setVideos(json?.items);
-  // };
-
-  // console.log(videos[0]?.statistics);
+  }, [currentquery]);
 
   const getVideos = async () => {
     try {
-      const response = await fetch(YOUTUBE_VIDEOS_API);
+      let response;
+
+      if (currentquery) {
+        response = await fetch(YOUTUBE_SEARCH_VIDEO + currentquery, {
+          method: "GET",
+        });
+        console.log("currquery response", response);
+      } else {
+        response = await fetch(YOUTUBE_VIDEOS_API);
+      }
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       const json = await response.json();
-      // console.log(json);
       setVideos(json.items);
     } catch (error) {
-      console.error("Error fetching videos:", error); // Handle error
+      console.error("Error fetching videos:", error);
     }
   };
+
   return (
     <div
       className={`grid gap-2 p-4 ${
@@ -51,11 +55,15 @@ const VideoContainer = () => {
         videos[0]
         // && <AdVideoCard info={videos[0]} />
       } */}
-      {videos?.map((video) => (
-        <Link key={video?.id} to={"/watch?v=" + video.id}>
-          <VideoCard info={video} />
-        </Link>
-      ))}
+      {videos?.map((video) => {
+        // console.log(video.id.videoId);
+        const videoId = video.id.videoId || video.id;
+        return (
+          <Link key={videoId} to={"/watch?v=" + video.id}>
+            <VideoCard info={video} />
+          </Link>
+        );
+      })}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CgProfile, CgSearch } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../features/appSlice";
@@ -18,6 +18,7 @@ function Head() {
   };
 
   const searchCache = useSelector((store) => store.search);
+  const suggestionsRef = useRef();
 
   /**
    *  searchCache = {
@@ -27,6 +28,11 @@ function Head() {
    */
   useEffect(() => {
     const timer = setTimeout(() => {
+      if (searchQuery.trim() == "") {
+        setSuggestions([]);
+        return;
+      }
+
       if (searchCache[searchQuery]) {
         setSuggestions(searchCache[searchQuery]);
       } else {
@@ -54,8 +60,8 @@ function Head() {
   // };
 
   const getSearchSugsestions = async () => {
-    console.log(searchQuery);
-    if (!searchQuery) return;
+    // console.log(searchQuery);
+    if (!searchQuery.trim()) return setSuggestions([]);
 
     try {
       const response = await fetch(YOUTUBE_SEARCH_API + searchQuery, {
@@ -67,7 +73,7 @@ function Head() {
       }
 
       const json = await response?.json();
-      console.log(json);
+      // console.log(json);
       setSuggestions(json[1]);
 
       // update cache
@@ -80,7 +86,26 @@ function Head() {
       console.error("Error fetching", error);
     }
   };
+  const handleClick = useCallback(
+    (suggestion) => {
+      if (suggestion) {
+        dispatch(cacheResults({ currentQuery: suggestion }));
+        setSearchQuery(suggestion);
+        setShowSuggestions(false);
+      }
+    },
+    [dispatch]
+  );
+  const handleBlur = (e) => {
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(e.relatedTarget)
+    ) {
+      setShowSuggestions(false);
+    }
+  };
 
+  const uniqueSuggestions = [...new Set(suggestions)];
   return (
     <div className="grid grid-flow-col m-4 ">
       <div className="flex items-center col-span-1 ">
@@ -109,17 +134,28 @@ function Head() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
-            onBlur={() => setShowSuggestions(false)}
+            onBlur={handleBlur}
           />
-          <button className="px-5 py-2 bg-gray-100 border border-gray-400 rounded-r-full">
+          <button
+            onClick={() => handleClick(searchQuery)}
+            className="px-5 py-2 bg-gray-100 border border-gray-400 rounded-r-full"
+          >
             🔍
           </button>
         </div>
         {showSuggestions && searchQuery && (
-          <div className="fixed bg-white py-2 px-2 w-[31rem] shadow-lg rounded-lg border border-gray-100">
+          <div
+            ref={suggestionsRef}
+            className="absolute overflow-y-auto bg-white py-2 px-2 w-[31rem] shadow-lg rounded-lg border border-gray-100"
+          >
             <ul>
-              {suggestions.map((s) => (
-                <li key={s} className="px-3 py-2 shadow-sm hover:bg-gray-100">
+              {uniqueSuggestions.map((s, index) => (
+                <li
+                  key={s}
+                  className="px-3 py-2 shadow-sm cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleClick(s)}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
                   🔍 {s}
                 </li>
               ))}
