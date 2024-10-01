@@ -3,13 +3,19 @@ import { useSelector } from "react-redux";
 
 const VideoCard = ({ info }) => {
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
-  const { snippet, statistics } = info || {};
+  const { snippet = {}, statistics = {} } = info || {};
 
-  const { channelTitle, title, thumbnails } = snippet || {};
+  const {
+    channelTitle = "Unknown Channel",
+    title = "No Title",
+    thumbnails = {},
+  } = snippet || {};
+
+  const { viewCount = "NA" } = statistics;
 
   if (!snippet || !thumbnails) return null;
   return (
-    <div className="p-2 m-2 rounded-md shadow-lg  h-80 mr-14 w-80 gid">
+    <div className="p-2 m-2 rounded-md shadow-lg h-80 mr-14 w-80 gid">
       <img
         className="flex items-center w-full rounded-lg"
         alt="thumbnail"
@@ -18,7 +24,7 @@ const VideoCard = ({ info }) => {
       <ul>
         <li className="flex items-center py-2 font-bold">{title}</li>
         <li>{channelTitle}</li>
-        <li>{statistics.viewCount} views</li>
+        <li>{viewCount} views</li>
       </ul>
     </div>
   );
