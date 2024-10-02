@@ -8,6 +8,15 @@
 // export const YOUTUBE_SEARCH_API =
 //   "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=Queryhttp://suggestqueries.google.com/complete/search?client=youtube&ds=yt&client=firefox&q=";
 
-export const YOUTUBE_VIDEOS_API = "http://localhost:3001/api/videos";
-export const YOUTUBE_SEARCH_API = "http://localhost:3001/api/search?q=";
-export const YOUTUBE_SEARCH_VIDEO = "http://localhost:3001/api/search/video?q=";
+//for local
+
+// export const YOUTUBE_VIDEOS_API = "http://localhost:3001/api/videos";
+// export const YOUTUBE_SEARCH_API = "http://localhost:3001/api/search?q=";
+// export const YOUTUBE_SEARCH_VIDEO = "http://localhost:3001/api/search/video?q=";
+
+export const YOUTUBE_VIDEOS_API =
+  "https://youtube-youtube.up.railway.app/api/videos";
+export const YOUTUBE_SEARCH_API =
+  "https://youtube-youtube.up.railway.app/api/search?q=";
+export const YOUTUBE_SEARCH_VIDEO =
+  "https://youtube-youtube.up.railway.app/api/search/video?q=";
