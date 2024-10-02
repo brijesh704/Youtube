@@ -1,6 +1,16 @@
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
+
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
+      // Ignore ESLint Errors in production
+      webpackConfig.plugins.forEach((plugin) => {
+        if (plugin instanceof ESLintWebpackPlugin) {
+          plugin.options.failOnError = process.env.NODE_ENV === "production";
+        }
+      });
+
+      // Configure fallback for Node.js modules
       webpackConfig.resolve.fallback = {
         http: require.resolve("stream-http"),
         fs: false,
@@ -13,8 +23,8 @@ module.exports = {
         path: require.resolve("path-browserify"),
         url: require.resolve("url"),
         zlib: require.resolve("browserify-zlib"),
-        url: require.resolve("url"),
       };
+
       return webpackConfig;
     },
   },
