@@ -12,14 +12,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT;
 const API_KEY = process.env.GOOGLE_API_KEY;
 console.log(API_KEY, "apiiiiiiiiiiii keyyyyyyyy");
 
 app.use(cors());
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../build")));
 
 app.get("/api/search", async (req, res) => {
   const query = req.query.q || "";
