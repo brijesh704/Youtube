@@ -29,7 +29,7 @@
   "scripts": {
     "start": "concurrently \"npm run start:server\" \"cross-env PORT=3000 craco start\"",
     "start:server": "node server/index.js",
-    "build": "CI=false craco build",
+    "build": "npm install --omit=dev && craco build",
     "build-ignore-eslint": "CI=false craco build",
     "test": "craco test",
     "test:watch": "craco test --watch",
