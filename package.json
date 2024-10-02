@@ -27,9 +27,8 @@
     "webpack": "^5.93.0"
   },
   "scripts": {
-    "start": "node server/index.js",
-    "build": " npm install && craco build",
-    "dev": "concurrently \"npm run start:server\" \"cross-env PORT=3000 craco start\"",
+    "start": "concurrently \"npm run start:server\" \"cross-env PORT=3000 craco start\"",
+    "build": "npm install && cd server && npm install && cd .. && craco build",
     "start:server": "node server/index.js",
     "test": "craco test",
     "test:watch": "craco test --watch",
