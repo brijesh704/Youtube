@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "build": "CI=false npm install && craco build",
+    "build": " npm install && craco build",
     "dev": "concurrently \"npm run start:server\" \"cross-env PORT=3000 craco start\"",
     "start:server": "node server/index.js",
     "test": "craco test",

@@ -9,10 +9,8 @@ import { useSelector } from "react-redux";
 
 const VideoContainer = () => {
   const [videos, setVideos] = useState([]);
-
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   const currentquery = useSelector((store) => store.search.currentQuery);
-  // console.log("query in video container ", currentquery);
 
   useEffect(() => {
     getVideos();
@@ -21,12 +19,10 @@ const VideoContainer = () => {
   const getVideos = async () => {
     try {
       let response;
-
       if (currentquery) {
         response = await fetch(YOUTUBE_SEARCH_VIDEO + currentquery, {
           method: "GET",
         });
-        console.log("currquery response", response);
       } else {
         response = await fetch(YOUTUBE_VIDEOS_API);
       }
@@ -44,19 +40,13 @@ const VideoContainer = () => {
 
   return (
     <div
-      className={`grid gap-2 p-4 ${
+      className={`grid gap-4 p-2 md:p-4 ${
         isMenuOpen
-          ? "grid-cols-1 md:grid-cols-3 "
-          : "grid-cols-1 md:grid-cols-4 ml-2"
-      } `}
-      // className="flex flex-wrap"
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      }`}
     >
-      {/* {
-        videos[0]
-        // && <AdVideoCard info={videos[0]} />
-      } */}
       {videos?.map((video) => {
-        // console.log(video.id.videoId);
         const videoId = video.id.videoId || video.id;
         return (
           <Link key={videoId} to={"/watch?v=" + videoId}>

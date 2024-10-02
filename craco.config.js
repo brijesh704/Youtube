@@ -2,6 +2,10 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   webpack: {
+    eslint: {
+      enable: false,
+    },
+
     configure: (webpackConfig) => {
       // Ignore ESLint Errors in production
       webpackConfig.plugins.forEach((plugin) => {
