@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  overflow-x: hidden;
+}
+
+.checkscroll::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+form {
+  width: 33%; /* 3/12 is equivalent to 25% */
+  padding: 3rem; /* Padding for desktop */
+  margin: 9rem auto; /* Adjust the vertical alignment */
+}
+
+@media (max-width: 1024px) {
+  form {
+    width: 94% !important; /* Adjust form width for tablets */
+    padding: 2rem;
+  }
+  .bgx-image {
+    min-width: 100%;
+    min-height: 100vh;
+  }
+  .bg-image {
+    background-position: center; /* Make sure background image is positioned well */
+    background-size: cover;
+  }
+}
+
+/* For mobile view (small screens) */
+@media (max-width: 768px) {
+  .bg-image {
+    background-position: center; /* Make sure background image is positioned well */
+    background-size: cover;
+  }
+}
