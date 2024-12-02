@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { checkValidData } from "../../utils/validate";
 import {
   createUserWithEmailAndPassword,
@@ -8,7 +8,7 @@ import {
 import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../features/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../../App.css";
 const Login = () => {
@@ -16,7 +16,12 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
   const handleToggleForm = () => {
     setIsSignup(!isSignup);
   };
@@ -86,7 +91,15 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-
+          console.log(user, "user in login routeeeee");
+          const { uid, email, displayName } = user;
+          dispatch(
+            setUser({
+              uid,
+              email,
+              displayName,
+            })
+          );
           navigate("/");
 
           alert("loged in");

@@ -1,13 +1,17 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import useAuthSync from "../hooks/useAuthSync";
+import { useDispatch, useSelector } from "react-redux";
 const ProtectedRoute = ({ children }) => {
-  const user = useSelector((store) => store.user);
-  console.log(user, "user");
-  // if (!user?.email) {
-  //   return <Navigate to="/login" />;
-  // }
+  const loading = useAuthSync();
+  const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 };

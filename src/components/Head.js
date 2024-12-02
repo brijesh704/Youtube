@@ -5,7 +5,7 @@ import { toggleMenu } from "../features/appSlice";
 import { cacheResults } from "../features/searchSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/contants";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+
 function Head() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,35 +13,10 @@ function Head() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
   const suggestionsRef = useRef();
-  const user = useSelector((store) => store.user);
 
   const handleSidebar = () => {
     dispatch(toggleMenu());
   };
-
-  //sync with firebase
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email, displayName, photoURL } = user;
-        dispatch(
-          setUser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            // photoURL: photoURL,
-          })
-        );
-        navigate("/browse");
-      } else {
-        dispatch(removeUser());
-        navigate("/");
-      }
-    });
-
-    //unsubscsribe when component unmounts
-    return () => unsubscribe();
-  }, []);
 
   /**
    *  searchCache = {

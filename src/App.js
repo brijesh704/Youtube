@@ -1,7 +1,11 @@
 import "./App.css";
 import Head from "./components/Head";
 import Body from "./views/Body/Body";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import store from "./app/store";
 import { Provider, useSelector } from "react-redux";
 import MainContainer from "./views/mainContainer/MainContainer";
@@ -11,43 +15,35 @@ import ProtectedRoute from "./utils/ProtectectedRoute";
 
 function AppContent() {
   const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
-  console.log(isLoggedIn, "is login");
-
+  console.log(isLoggedIn, "is login in apppppppjs");
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: <Body />,
+      element: (
+        <ProtectedRoute>
+          <Body />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "/",
-          element: (
-            <ProtectedRoute>
-              <MainContainer />,
-            </ProtectedRoute>
-          ),
+          element: <MainContainer />,
         },
         {
           path: "watch",
-          element: (
-            <ProtectedRoute>
-              <WatchPage />,
-            </ProtectedRoute>
-          ),
+          element: <WatchPage />,
         },
       ],
     },
     {
       path: "/login",
-      element: <Login />,
+      element: !isLoggedIn ? <Login /> : <Navigate to="/" />,
     },
   ]);
-
   return (
     <>
-      <div>
-        {isLoggedIn && <Head />}
-        <RouterProvider router={appRouter} />
-      </div>
+      <div>{isLoggedIn && <Head />}</div>
+      <RouterProvider router={appRouter} />
     </>
   );
 }
@@ -59,4 +55,5 @@ function App() {
     </Provider>
   );
 }
+
 export default App;
