@@ -5,15 +5,21 @@ import { toggleMenu } from "../features/appSlice";
 import { cacheResults } from "../features/searchSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/contants";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { removeUser } from "../features/userSlice";
 
 function Head() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const searchCache = useSelector((store) => store.search);
   const suggestionsRef = useRef();
+  const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
+  const user = useSelector((store) => store.user.user);
+  console.log(user, "user in head");
 
+  const { displayName } = user;
   const handleSidebar = () => {
     dispatch(toggleMenu());
   };
@@ -42,6 +48,19 @@ function Head() {
       clearTimeout(timer);
     };
   }, [searchQuery]);
+
+  // for outside click of profile conitainer
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".profile-container")) {
+        setDropdownVisible(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   // const getSearchSugsestions = async () => {
   //   const data = await fetch("http://localhost:5000/api/search" + searchQuery);
   //   const json = await data?.json();
@@ -159,8 +178,38 @@ function Head() {
         )}
       </div>
 
-      <div className="flex items-center justify-end col-span-2">
-        <CgProfile className="text-xl md:text-2xl" />
+      <div className="flex items-center justify-center col-span-2">
+        {/* <CgProfile className="text-xl md:text-2xl" /> */}
+        {isLoggedIn && (
+          <div className=" profile-container relative flex items-center">
+            <img
+              className="h-8 rounded-full cursor-pointer"
+              alt="user"
+              src={
+                user
+                  ? user.photoURL
+                  : "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+              }
+              onClick={() => setDropdownVisible(!dropdownVisible)}
+            />
+            {dropdownVisible && (
+              <div className="absolute top-10 right-0 bg-white border border-gray-200 rounded-md shadow-md w-48 z-10">
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <p className="text-sm text-gray-700">Hello, {displayName}</p>
+                </div>
+                <button
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    setDropdownVisible(false);
+                    dispatch(removeUser());
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

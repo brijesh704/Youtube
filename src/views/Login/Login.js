@@ -9,7 +9,7 @@ import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-
+import { USER_AVATAR } from "../../utils/contants";
 import "../../App.css";
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -50,7 +50,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: name.current.value,
-            // photoURL: USER_AVATAR,
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = user;
@@ -60,7 +60,7 @@ const Login = () => {
                   uid: uid,
                   email: email,
                   displayName: displayName,
-                  // photoURL: photoURL,
+                  photoURL: photoURL,
                 })
               );
               // Profile updated!
@@ -92,12 +92,13 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           console.log(user, "user in login routeeeee");
-          const { uid, email, displayName } = user;
+          const { uid, email, displayName, photoURL } = user;
           dispatch(
             setUser({
               uid,
               email,
               displayName,
+              photoURL,
             })
           );
           navigate("/");
@@ -120,7 +121,7 @@ const Login = () => {
           <div
             // src="https://assets.nflxext.com/ffe/siteui/vlv3/04bef84d-51f6-401e-9b8e-4a521cbce3c5/null/IN-en-20240903-TRIFECTA-perspective_0d3aac9c-578f-4e3c-8aa8-bbf4a392269b_large.jpg"
             // alt="bg-image"
-            className="object-cover w-full h-[100vh] bg-slate-500"
+            className="object-cover w-full h-[100vh] bg-current"
           />
         </div>
 

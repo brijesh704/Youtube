@@ -35,7 +35,7 @@ function LiveChat() {
       </div>
       <div className=" flex items-center p-2 m-2 border bg-gray-100 w-full rounded-lg">
         <form
-          className="flex items-center justify-around w-full"
+          className="flex items-center justify-around w-full p-2 m-2"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch(addMessage({ name: "brijesh", msg: text + " 🚀" }));

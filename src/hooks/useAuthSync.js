@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { setUser, removeUser } from "../features/userSlice";
 import { auth } from "../utils/firebase";
 
 const useAuthSync = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,10 +19,10 @@ const useAuthSync = () => {
             uid,
             email,
             displayName,
-            // photoURL,
+            photoURL,
           })
         );
-        console.log(user, "user in useAuthSync hokkkkkk");
+        navigate("/");
       } else {
         dispatch(removeUser());
       }

@@ -13,7 +13,8 @@
 export const YOUTUBE_VIDEOS_API = "http://localhost:3001/api/videos";
 export const YOUTUBE_SEARCH_API = "http://localhost:3001/api/search?q=";
 export const YOUTUBE_SEARCH_VIDEO = "http://localhost:3001/api/search/video?q=";
-
+export const USER_AVATAR =
+  "https://avatars.githubusercontent.com/u/81145474?s=400&u=8b328f25167a25decb1f4af0525d3f0d2302874b&v=4";
 // export const YOUTUBE_VIDEOS_API =
 //   "https://youtube-youtube.up.railway.app/api/videos";
 // export const YOUTUBE_SEARCH_API =
